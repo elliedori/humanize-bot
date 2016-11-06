@@ -43,7 +43,6 @@ EM.run do
 
     if user_input
       case user_input.downcase
-        # given_appr_response(user_input)
       when 'hi'
         web_socket.send({
           type: 'message',
@@ -72,29 +71,6 @@ EM.run do
   end
   
 end
-
-
-# app_response(input)
-#   if input.greeting?
-#     skdhfksndf
-# end
-
-# def greeting?(words)
-#   if words =~ ?slkdfsdfskd
-#     true
-# end
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
