@@ -41,7 +41,19 @@ EM.run do
           type: 'message',
           text: "Hi <@#{data['user']}>",
           channel: data['channel']
-          }.to_json)
+        }.to_json)
+      when 'love you'
+        web_socket.send({
+          type: 'message',
+          text: ":heart:",
+          channel: data['channel']
+        }.to_json)
+      when 'you gucci?'
+        web_socket.send({
+          type: 'message',
+          text: "You know it.",
+          channel: data['channel']
+        }.to_json)
       end
     end
     p [:message, data]
