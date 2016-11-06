@@ -23,47 +23,58 @@ clean_users.delete("USLACKBOT")
 
 pairs = pair_users(clean_users)
 
-EM.run do 
-  web_socket = Faye::WebSocket::Client.new(web_socket_url)
 
-  web_socket.on :open do |event|
-    p [:open]
-  end
 
-  web_socket.on :message do |event|
-    data = JSON.parse(event.data)
-    user_input = data['text']
+HTTP.post("https://slack.com/api/chat.postMessage", params: {
+  token: ENV['TOKEN'],
+  channel: '#testing',
+  text: pairs,
+  as_user: true
+  })
 
-    if user_input
-      case user_input.downcase
-      when 'hi'
-        web_socket.send({
-          type: 'message',
-          text: "Hi <@#{data['user']}>",
-          channel: data['channel']
-        }.to_json)
-      when 'love you'
-        web_socket.send({
-          type: 'message',
-          text: ":heart:",
-          channel: data['channel']
-        }.to_json)
-      when 'you gucci?'
-        web_socket.send({
-          type: 'message',
-          text: "You know it.",
-          channel: data['channel']
-        }.to_json)
-      end
-    end
-    p [:message, data]
-  end
 
-  web_socket.on :close do |event|
-    p [:close]
-  end
+
+# EM.run do 
+#   web_socket = Faye::WebSocket::Client.new(web_socket_url)
+
+#   web_socket.on :open do |event|
+#     p [:open]
+#   end
+
+#   web_socket.on :message do |event|
+#     data = JSON.parse(event.data)
+#     user_input = data['text']
+
+#     if user_input
+#       case user_input.downcase
+#       when 'hi'
+#         web_socket.send({
+#           type: 'message',
+#           text: "Hi <@#{data['user']}>",
+#           channel: data['channel']
+#         }.to_json)
+#       when 'love you'
+#         web_socket.send({
+#           type: 'message',
+#           text: ":heart:",
+#           channel: data['channel']
+#         }.to_json)
+#       when 'you gucci?'
+#         web_socket.send({
+#           type: 'message',
+#           text: "You know it.",
+#           channel: data['channel']
+#         }.to_json)
+#       end
+#     end
+#     p [:message, data]
+#   end
+
+#   web_socket.on :close do |event|
+#     p [:close]
+#   end
   
-end
+# end
 
 
 
