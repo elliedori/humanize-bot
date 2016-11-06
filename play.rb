@@ -2,10 +2,8 @@ require 'http'
 require 'json'
 require 'eventmachine'
 require 'faye/websocket'
-require 'dotenv'
 require 'httparty'
-
-
-rc = HTTP.post("https://slack.com/api/auth.test", params: {
-  token: ENV['TOKEN']
-})
+require 'pry'
+require 'dotenv'
+Dotenv.load
+require_relative 'module'
