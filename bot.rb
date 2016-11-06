@@ -28,13 +28,27 @@ EM.run do
 
   web_socket.on :open do |event|
     p [:open]
-    debug(event)
   end
 
   web_socket.on :message do |event|
+    data = JSON.parse(event.data)
+    user_input = data['text']
+
+    if user_input
+      case user_input.downcase
+      when 'hi'
+        web_socket.send({
+          type: 'message',
+          text: "Hi <@#{data['user']}>",
+          channel: data['channel']
+          }.to_json)
+      end
+    end
+    p [:message, data]
   end
 
-  web_socket.on :clonse do |event|
+  web_socket.on :close do |event|
+    p [:close]
   end
   
 end
