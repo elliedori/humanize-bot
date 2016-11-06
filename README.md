@@ -1,2 +1,2 @@
-# humanize
-DBC Final Project 
+# Humanize-Bot
+An emotional intelligence tool for corporations.
