@@ -18,64 +18,71 @@ slack_response = HTTP.post("https://slack.com/api/rtm.start", params: {
 web_socket_url = JSON.parse(slack_response.body)['url']
 users = JSON.parse(slack_response.body)['users']
 
-clean_users = users.select {|user| user['profile']['bot_id'].nil?}.map {|user| user['id']}
+clean_users = users.select {|user| user['profile']['bot_id'].nil? && user['deleted'] == false}.map {|user| user['id']}
 clean_users.delete("USLACKBOT")
-
 pairs = pair_users(clean_users)
-
 
 
 HTTP.post("https://slack.com/api/chat.postMessage", params: {
   token: ENV['TOKEN'],
   channel: '#testing',
-  text: pairs,
+  text: "```#{pairs}```",
   as_user: true
   })
 
+EM.run do 
+  web_socket = Faye::WebSocket::Client.new(web_socket_url)
 
+  web_socket.on :open do |event|
+    p [:open]
+  end
 
-# EM.run do 
-#   web_socket = Faye::WebSocket::Client.new(web_socket_url)
+  web_socket.on :message do |event|
+    data = JSON.parse(event.data)
+    user_input = data['text']
 
-#   web_socket.on :open do |event|
-#     p [:open]
-#   end
+    if user_input
+      case user_input.downcase
+        # given_appr_response(user_input)
+      when 'hi'
+        web_socket.send({
+          type: 'message',
+          text: "Hi <@#{data['user']}>",
+          channel: data['channel']
+        }.to_json)
+      when 'love you'
+        web_socket.send({
+          type: 'message',
+          text: ":heart:",
+          channel: data['channel']
+        }.to_json)
+      when 'you gucci?'
+        web_socket.send({
+          type: 'message',
+          text: "You know it.",
+          channel: data['channel']
+        }.to_json)
+      end
+    end
+    p [:message, data]
+  end
 
-#   web_socket.on :message do |event|
-#     data = JSON.parse(event.data)
-#     user_input = data['text']
-
-#     if user_input
-#       case user_input.downcase
-#       when 'hi'
-#         web_socket.send({
-#           type: 'message',
-#           text: "Hi <@#{data['user']}>",
-#           channel: data['channel']
-#         }.to_json)
-#       when 'love you'
-#         web_socket.send({
-#           type: 'message',
-#           text: ":heart:",
-#           channel: data['channel']
-#         }.to_json)
-#       when 'you gucci?'
-#         web_socket.send({
-#           type: 'message',
-#           text: "You know it.",
-#           channel: data['channel']
-#         }.to_json)
-#       end
-#     end
-#     p [:message, data]
-#   end
-
-#   web_socket.on :close do |event|
-#     p [:close]
-#   end
+  web_socket.on :close do |event|
+    p [:close]
+  end
   
+end
+
+
+# app_response(input)
+#   if input.greeting?
+#     skdhfksndf
 # end
 
+# def greeting?(words)
+#   if words =~ ?slkdfsdfskd
+#     true
+# end
 
 
 
