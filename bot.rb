@@ -19,6 +19,20 @@ web_socket_url = JSON.parse(slack_response.body)['url']
 users = JSON.parse(slack_response.body)['users']
 
 clean_users = users.select {|user| user['profile']['bot_id'].nil?}.map {|user| user['id']}
-# clean_users.delete("USLACKBOT")
+clean_users.delete("USLACKBOT")
 
-pair_users(clean_users)
+pairs = pair_users(clean_users)
+
+EM.run do 
+  web_socket = Faye::WebSocket::Client.new(web_socket_url)
+
+  web_socket.on :open do |event|
+    p [:open]
+  end
+
+  web_socket.on :message do |event|
+  end
+
+  web_socket.
+  
+end
