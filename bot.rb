@@ -28,11 +28,29 @@ EM.run do
 
   web_socket.on :open do |event|
     p [:open]
+    debug(event)
   end
 
   web_socket.on :message do |event|
   end
 
-  web_socket.
+  web_socket.on :clonse do |event|
+  end
   
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
