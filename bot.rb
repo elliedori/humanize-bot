@@ -10,6 +10,8 @@ require_relative 'humanize-api-helper'
 require_relative 'helpers'
 require_relative 'conversation'
 
+include Convo
+
 humanize_content = Humanize.get_content('tests/5')
 
 slack_response = HTTP.post("https://slack.com/api/rtm.start", params: {
@@ -23,13 +25,12 @@ clean_users = users.select {|user| user['profile']['bot_id'].nil? && user['delet
 clean_users.delete("USLACKBOT")
 pairs = pair_users(clean_users)
 
-
-HTTP.post("https://slack.com/api/chat.postMessage", params: {
-  token: ENV['TOKEN'],
-  channel: '#testing',
-  text: "```#{pairs}```",
-  as_user: true
-  })
+# HTTP.post("https://slack.com/api/chat.postMessage", params: {
+#   token: ENV['TOKEN'],
+#   channel: '#testing',
+#   text: "```#{pairs}```",
+#   as_user: true
+#   })
 
 EM.run do 
   web_socket = Faye::WebSocket::Client.new(web_socket_url)
@@ -40,12 +41,16 @@ EM.run do
 
   web_socket.on :message do |event|
     data = JSON.parse(event.data)
-    user_input = data['text'].downcase
+    user_input = data['text']
+    user_name = data['user']
+
 
     if user_input
+      response = give_correct_response(user_input.downcase, user_name)
+         debug(response)
          web_socket.send({
           type: 'message',
-          text: Convo.give_correct_response(user_input),
+          text: "#{response}",
           channel: data['channel']
         }.to_json)
     end
