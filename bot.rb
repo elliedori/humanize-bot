@@ -44,10 +44,8 @@ EM.run do
     user_input = data['text']
     user_name = data['user']
 
-
     if user_input
       response = give_correct_response(user_input.downcase, user_name)
-         debug(response)
          web_socket.send({
           type: 'message',
           text: "#{response}",
