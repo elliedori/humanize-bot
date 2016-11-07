@@ -8,6 +8,7 @@ require 'dotenv'
 Dotenv.load
 require_relative 'humanize-api-helper'
 require_relative 'helpers'
+require_relative 'conversation'
 
 humanize_content = Humanize.get_content('tests/5')
 
@@ -39,29 +40,14 @@ EM.run do
 
   web_socket.on :message do |event|
     data = JSON.parse(event.data)
-    user_input = data['text']
+    user_input = data['text'].downcase
 
     if user_input
-      case user_input.downcase
-      when 'hi'
-        web_socket.send({
+         web_socket.send({
           type: 'message',
-          text: "Hi <@#{data['user']}>",
+          text: Convo.give_correct_response(user_input),
           channel: data['channel']
         }.to_json)
-      when 'love you'
-        web_socket.send({
-          type: 'message',
-          text: ":heart:",
-          channel: data['channel']
-        }.to_json)
-      when 'you gucci?'
-        web_socket.send({
-          type: 'message',
-          text: "You know it.",
-          channel: data['channel']
-        }.to_json)
-      end
     end
     p [:message, data]
   end
