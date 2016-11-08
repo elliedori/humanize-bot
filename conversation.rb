@@ -12,8 +12,14 @@ module Convo
     end
   end
 
-  def suggestion?(words)
-    if words =~ /suggest/
+  def dm_suggestion?(words, channel)
+    if words =~ /suggest/ && channel =~ /^D/
+      true
+    end
+  end
+
+  def ch_suggestion?(words, channel)
+    if words =~ /suggest/ && channel =~ /^C/
       true
     end
   end
@@ -42,10 +48,11 @@ module Convo
     end
   end
 
-  def give_correct_response(input, data)
-    return "#{GREETINGS.sample} <@#{data}>" if greeting?(input)
+  def give_correct_response(input, name, channel)
+    return "#{GREETINGS.sample} <@#{name}>" if greeting?(input)
     return LOVES.sample if love?(input)
-    return "Thanks for your suggestion! I've passed it along to your Humanize admin :)" if suggestion?(input)
+    return "If you'd like to suggest a topic for a Humanize session, let me know via DM by typing `suggest` and then the topic. Thanks!"  if ch_suggestion?(input, channel)
+    return "Thanks for your suggestion! I've passed it along to your Humanize admin :)" if dm_suggestion?(input, channel)
     return THANKS.sample if thankful?(input)
     return ":speak_no_evil:" if bad_words?(input)
     return HELP_MESSAGE if need_help?(input)

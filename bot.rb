@@ -43,9 +43,10 @@ EM.run do
     data = JSON.parse(event.data)
     user_input = data['text']
     user_name = data['user']
+    channel = data['channel']
 
     if user_input
-      response = give_correct_response(user_input.downcase, user_name)
+      response = give_correct_response(user_input.downcase, user_name, channel)
          web_socket.send({
           type: 'message',
           text: "#{response}",
