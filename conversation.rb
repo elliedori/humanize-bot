@@ -7,7 +7,7 @@ module Convo
   NO_COMPRENDE = "Sorry, I don't understand. I'm just a little bot doing bot things. Try typing `help` for more info."
   
   def greeting?(words)
-    if words =~ /(hi|hello|hey)/
+    if words =~ /(^hi|hello|hey|howdy)/
       true
     end
   end
@@ -31,7 +31,7 @@ module Convo
   end
 
   def bad_words?(words)
-    if words =~ /(fuck|shit|asshole)/
+    if words =~ /(fuck|shit|hate|asshole)/
       true
     end
   end
@@ -40,8 +40,8 @@ module Convo
     return "#{GREETINGS.sample} <@#{data}>" if greeting?(input)
     return LOVES.sample if love?(input)
     return THANKS.sample if thankful?(input)
-    return HELP_MESSAGE if need_help?(input)
     return ":speak_no_evil:" if bad_words?(input)
+    return HELP_MESSAGE if need_help?(input)
     return NO_COMPRENDE
 
   end
