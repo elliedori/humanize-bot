@@ -12,6 +12,12 @@ module Convo
     end
   end
 
+  def suggestion?(words)
+    if words =~ /suggest/
+      true
+    end
+  end
+
   def love?(words)
     if words =~ /(love|luv u)/
       true
@@ -39,6 +45,7 @@ module Convo
   def give_correct_response(input, data)
     return "#{GREETINGS.sample} <@#{data}>" if greeting?(input)
     return LOVES.sample if love?(input)
+    return "Thanks for your suggestion! I've passed it along to your Humanize admin :)" if suggestion?(input)
     return THANKS.sample if thankful?(input)
     return ":speak_no_evil:" if bad_words?(input)
     return HELP_MESSAGE if need_help?(input)
