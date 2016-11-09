@@ -11,7 +11,7 @@ GEM
     faye-websocket (0.10.4)
       eventmachine (>= 0.12.0)
       websocket-driver (>= 0.5.1)
-    http (2.0.3)
+    http (2.1.0)
       addressable (~> 2.3)
       http-cookie (~> 1.0)
       http-form_data (~> 1.0.1)
@@ -29,7 +29,7 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
-    public_suffix (2.0.3)
+    public_suffix (2.0.4)
     slop (3.6.0)
     unf (0.1.4)
       unf_ext

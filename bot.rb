@@ -8,6 +8,9 @@ require 'dotenv'
 Dotenv.load
 require_relative 'humanize-api-helper'
 require_relative 'helpers'
+require_relative 'conversation'
+
+include Convo
 
 humanize_content = Humanize.get_content('tests/5')
 
@@ -21,7 +24,6 @@ users = JSON.parse(slack_response.body)['users']
 clean_users = users.select {|user| user['profile']['bot_id'].nil? && user['deleted'] == false}.map {|user| user['id']}
 clean_users.delete("USLACKBOT")
 pairs = pair_users(clean_users)
-
 
 HTTP.post("https://slack.com/api/chat.postMessage", params: {
   token: ENV['TOKEN'],
@@ -40,28 +42,16 @@ EM.run do
   web_socket.on :message do |event|
     data = JSON.parse(event.data)
     user_input = data['text']
+    user_name = data['user']
+    channel = data['channel']
 
     if user_input
-      case user_input.downcase
-      when 'hi'
-        web_socket.send({
+      response = give_correct_response(user_input.downcase, user_name, channel)
+         web_socket.send({
           type: 'message',
-          text: "Hi <@#{data['user']}>",
+          text: "#{response}",
           channel: data['channel']
         }.to_json)
-      when 'love you'
-        web_socket.send({
-          type: 'message',
-          text: ":heart:",
-          channel: data['channel']
-        }.to_json)
-      when 'you gucci?'
-        web_socket.send({
-          type: 'message',
-          text: "You know it.",
-          channel: data['channel']
-        }.to_json)
-      end
     end
     p [:message, data]
   end
