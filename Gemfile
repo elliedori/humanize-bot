@@ -8,5 +8,3 @@ gem 'dotenv'
 gem 'httparty'
 gem 'pry'
 
-gem 'whenever', :require => false
-

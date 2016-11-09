@@ -25,12 +25,12 @@ clean_users = users.select {|user| user['profile']['bot_id'].nil? && user['delet
 clean_users.delete("USLACKBOT")
 pairs = pair_users(clean_users)
 
-# HTTP.post("https://slack.com/api/chat.postMessage", params: {
-#   token: ENV['TOKEN'],
-#   channel: '#testing',
-#   text: "```#{pairs}```",
-#   as_user: true
-#   })
+HTTP.post("https://slack.com/api/chat.postMessage", params: {
+  token: ENV['TOKEN'],
+  channel: '#testing',
+  text: "```#{pairs}```",
+  as_user: true
+  })
 
 EM.run do 
   web_socket = Faye::WebSocket::Client.new(web_socket_url)
