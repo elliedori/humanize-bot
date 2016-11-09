@@ -3,7 +3,6 @@ GEM
   specs:
     addressable (2.5.0)
       public_suffix (~> 2.0, >= 2.0.2)
-    chronic (0.10.2)
     coderay (1.1.1)
     domain_name (0.5.20161021)
       unf (>= 0.0.5, < 1.0.0)
@@ -12,7 +11,7 @@ GEM
     faye-websocket (0.10.4)
       eventmachine (>= 0.12.0)
       websocket-driver (>= 0.5.1)
-    http (2.0.3)
+    http (2.1.0)
       addressable (~> 2.3)
       http-cookie (~> 1.0)
       http-form_data (~> 1.0.1)
@@ -30,7 +29,7 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
-    public_suffix (2.0.3)
+    public_suffix (2.0.4)
     slop (3.6.0)
     unf (0.1.4)
       unf_ext
@@ -38,8 +37,6 @@ GEM
     websocket-driver (0.6.4)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
-    whenever (0.9.7)
-      chronic (>= 0.6.3)
 
 PLATFORMS
   ruby
@@ -52,7 +49,6 @@ DEPENDENCIES
   httparty
   json
   pry
-  whenever
 
 BUNDLED WITH
    1.13.6

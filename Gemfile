@@ -7,4 +7,3 @@ gem 'eventmachine'
 gem 'dotenv'
 gem 'httparty'
 gem 'pry'
-
