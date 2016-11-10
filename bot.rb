@@ -25,7 +25,7 @@ allyquote
 
 
 
-humanize_content = Humanize.get_content('tests/5')
+# humanize_content = Humanize.get_content('tests/5')
 
 slack_response = HTTP.post("https://slack.com/api/rtm.start", params: {
   token: ENV['TOKEN'] 
@@ -53,8 +53,10 @@ pairs = pair_users(clean_users)
 #   as_user: true
 #   })
 
+
 EM.run do 
   web_socket = Faye::WebSocket::Client.new(web_socket_url)
+
 
   web_socket.on :open do |event|
     p [:open]
@@ -68,21 +70,54 @@ EM.run do
 
     if user_input
       if user_input =~ /(begin)/
-        HTTP.post("https://slack.com/api/chat.postMessage", params: {
-        token: ENV['TOKEN'],
-        channel: '#testing',
-        text: "```#{pairs}```",
-        as_user: true
-        })
-      sleep(10)
 
-      HTTP.post("https://slack.com/api/chat.postMessage", params: {
-        token: ENV['TOKEN'],
-        channel: '#testing',
-        text: "#{allyship}",
-        as_user: true
-        })
-        #  if send_topic(web_socket, channel)
+      n = 0
+      timer = EventMachine::PeriodicTimer.new(1) do
+        puts "the time is #{Time.now}"
+        web_socket.send({
+          type: 'message',
+          text: "once",
+          channel: channel
+        }.to_json)
+        timer.cancel if (n+=1) > 5
+      end
+
+      n = 0
+      timer = EventMachine::PeriodicTimer.new(5) do
+        puts "the time is #{Time.now}"
+        web_socket.send({
+          type: 'message',
+          text: "1",
+          channel: channel
+        }.to_json)
+        timer.cancel if (n+=1) > 5
+      end
+              
+
+
+        # EventMachine::Timer.new(5) {
+        
+        # web_socket.send({
+        #   type: 'message',
+        #   text: "2",
+        #   channel: channel
+        # }.to_json)}
+
+        # # timer
+
+        
+        # EventMachine::Timer.new(5) {
+        
+        # web_socket.send({
+        #   type: 'message',
+        #   text: "3",
+        #   channel: channel
+        # }.to_json)}
+
+
+
+       
+        # if send_topic(web_socket, channel)
         #   debug("hi")
         # end
         #  sleep(10)

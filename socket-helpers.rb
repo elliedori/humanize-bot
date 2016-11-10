@@ -3,6 +3,7 @@ def send_topic(socket, channel)
             text: "hey",
             channel: channel
             }.to_json)
+  
 end
 
 
