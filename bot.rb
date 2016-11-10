@@ -1,16 +1,17 @@
+require 'pry'
 require 'http'
 require 'json'
+require 'dotenv'
+require 'httparty'
 require 'eventmachine'
 require 'faye/websocket'
-require 'httparty'
-require 'pry'
-require 'dotenv'
 Dotenv.load
-require_relative 'humanize-api-helper'
+
+require_relative 'content'
 require_relative 'helpers'
 require_relative 'conversation'
 require_relative 'socket-helpers'
-require_relative 'content'
+require_relative 'humanize-api-helper'
 
 include Convo
 
@@ -46,10 +47,6 @@ EM.run do
 
     if user_input
       if user_input =~ /(begin)/
-
-        # pre_link = "Here's the pre-session survey < http://humanizebot.herokuapp.com/dropbox/survey?type=before | link >."
-        # post_link = "Here's the post-session survey < http://humanizebot.herokuapp.com/dropbox/survey?type=after | link >."
-
         send_groups(web_socket, pairs, channel)
         content = [PRELINK, TOPIC, START, SWITCH, POSTLINK]
         timer = EventMachine::PeriodicTimer.new(3) do
