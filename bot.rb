@@ -22,13 +22,6 @@ slack_handshake = HTTP.post("https://slack.com/api/rtm.start", params: {
 web_socket_url = JSON.parse(slack_handshake.body)['url']
 
 
-HTTP.post("https://slack.com/api/chat.postMessage", params: {
-  token: ENV['TOKEN'],
-  channel: '#testing',
-  text: "`<https://www.google.com|google>`",
-  as_user: true
-  })
-
 # get and clean user data to create session pairs
 
 users = JSON.parse(slack_handshake.body)['users']
@@ -54,16 +47,20 @@ EM.run do
 
     if user_input
       if user_input =~ /(begin)/
-        # send_groups(web_socket, pairs, channel)
+        send_groups(web_socket, pairs, channel)
         content = [PRELINK, TOPIC, START, SWITCH, POSTLINK]
         timer = EventMachine::PeriodicTimer.new(3) do
           puts "the time is #{Time.now}"
-          web_socket.send({
-            type: 'message',
-            text: content.shift,
-            parse: 'none',
-            channel: channel
-          }.to_json)
+
+          # an error in Slack RTM API prevents links from being correctly formatted,
+          # have to send them via HTTP/post for now
+
+          HTTP.post("https://slack.com/api/chat.postMessage", params: {
+          token: ENV['TOKEN'],
+          channel: channel,
+          text: content.shift,
+          as_user: true
+          })
           timer.cancel if content.length == 0
         end
       else
