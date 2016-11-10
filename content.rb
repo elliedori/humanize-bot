@@ -12,8 +12,8 @@ allyquote
 
 START = "First person start! You get two minutes to speak."
 
-SWITCH = "Switch! Next person has two minutes to speak"
+SWITCH = "Switch! Next person has two minutes to speak."
 
-PRELINK = "Here's the <http://humanizebot.herokuapp.com/dropbox/survey?type=before | pre-session survey>."
+PRELINK = "Here's the `<http://humanizebot.herokuapp.com/dropbox/survey?type=before|survey>`."
 
-POSTLINK = "Here's the <http://humanizebot.herokuapp.com/dropbox/survey?type=after | post-session survey>."
+POSTLINK = "Here's the `<http://humanizebot.herokuapp.com/dropbox/survey?type=after | post-session survey>`."
