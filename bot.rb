@@ -13,7 +13,7 @@ require_relative 'socket-helpers'
 
 include Convo
 
-allyship = <<-allyquote 
+topic = <<-allyquote 
 Hi friends, today's topic is *Allyship*. What is an `ally`?\n
 ```An ally is someone who advocates for and works to reduce the oppression of a group that's not their own.```\n
 For example, some of my bot friends who are animals (like Polly, if you know her) get made fun of for being animal bots. Even though I'm not an animal bot, I speak up when this happens because it's not kind to treat others differently based on how they look.\n\n
@@ -23,9 +23,8 @@ Here are some helpful links if you want to learn more:\n
 > `<http://www.diversitydufferin.com/how-to-be.html | What Is An Ally?>`\n> `<https://medium.com/@agelender/6-action-items-for-white-people-in-the-workplace-beyond-ecf87271e89a#.cuxp78nv7 | Actionable Allyship>`\n> `<http://leanin.org/tips/workplace-ally | How To Be a Workplace Ally>`\n> `<http://www.diversityinc.com/diversity-events/the-stereotype-threat-dr-claude-steele-mesmerizes-audience-video/ | Stereotype Threat & Workplace Diversity>`
 allyquote
 
-
-
-# humanize_content = Humanize.get_content('tests/5')
+pre_link = "We've got a Humanize session today! Here\'s the <http://humanizebot.herokuapp.com/dropbox/survey?type=before | pre-session survey>."
+post_link = "Here's the <http://humanizebot.herokuapp.com/dropbox/survey?type=after | post-session survey>."
 
 slack_response = HTTP.post("https://slack.com/api/rtm.start", params: {
   token: ENV['TOKEN'] 
@@ -57,7 +56,6 @@ pairs = pair_users(clean_users)
 EM.run do 
   web_socket = Faye::WebSocket::Client.new(web_socket_url)
 
-
   web_socket.on :open do |event|
     p [:open]
   end
@@ -71,57 +69,50 @@ EM.run do
     if user_input
       if user_input =~ /(begin)/
 
-      n = 0
-      timer = EventMachine::PeriodicTimer.new(1) do
-        puts "the time is #{Time.now}"
-        web_socket.send({
-          type: 'message',
-          text: "once",
-          channel: channel
-        }.to_json)
-        timer.cancel if (n+=1) > 5
-      end
+        pre_link = "Here's the pre-session survey < http://humanizebot.herokuapp.com/dropbox/survey?type=before | link >."
+        post_link = "Here's the post-session survey < http://humanizebot.herokuapp.com/dropbox/survey?type=after | link >."
 
-      n = 0
-      timer = EventMachine::PeriodicTimer.new(5) do
-        puts "the time is #{Time.now}"
-        web_socket.send({
-          type: 'message',
-          text: "1",
-          channel: channel
-        }.to_json)
-        timer.cancel if (n+=1) > 5
-      end
-              
+        send_groups(web_socket, pairs, channel)
+        content = [pre_link, topic, "First person start! You get two minutes to speak", "Switch! Next person has two minutes to speak", post_link]
+        timer = EventMachine::PeriodicTimer.new(3) do
+          puts "the time is #{Time.now}"
+          web_socket.send({
+            type: 'message',
+            text: content.shift,
+            channel: channel
+          }.to_json)
+          timer.cancel if content.length == 0
+        end
 
+          # EventMachine::Timer.new(5) {
+          
+          # web_socket.send({
+          #   type: 'message',
+          #   text: "2",
+          #   channel: channel
+          # }.to_json)}
 
-        # EventMachine::Timer.new(5) {
-        
-        # web_socket.send({
-        #   type: 'message',
-        #   text: "2",
-        #   channel: channel
-        # }.to_json)}
+          # # timer
 
-        # # timer
-
-        
-        # EventMachine::Timer.new(5) {
-        
-        # web_socket.send({
-        #   type: 'message',
-        #   text: "3",
-        #   channel: channel
-        # }.to_json)}
+          
+          # EventMachine::Timer.new(5) {
+          
+          # web_socket.send({
+          #   type: 'message',
+          #   text: "3",
+          #   channel: channel
+          # }.to_json)}
 
 
 
-       
-        # if send_topic(web_socket, channel)
-        #   debug("hi")
-        # end
-        #  sleep(10)
-        #  send_groups(web_socket, channel)
+         
+          # if send_topic(web_socket, channel)
+          #   debug("hi")
+          # end
+          #  sleep(10)
+          #  send_groups(web_socket, channel)
+
+
       else
         response = give_correct_response(user_input.downcase, user_name, channel)
          web_socket.send({
