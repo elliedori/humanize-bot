@@ -47,11 +47,11 @@ EM.run do
     if user_input
       if user_input =~ /(begin)/
 
-        pre_link = "Here's the pre-session survey < http://humanizebot.herokuapp.com/dropbox/survey?type=before | link >."
-        post_link = "Here's the post-session survey < http://humanizebot.herokuapp.com/dropbox/survey?type=after | link >."
+        # pre_link = "Here's the pre-session survey < http://humanizebot.herokuapp.com/dropbox/survey?type=before | link >."
+        # post_link = "Here's the post-session survey < http://humanizebot.herokuapp.com/dropbox/survey?type=after | link >."
 
         send_groups(web_socket, pairs, channel)
-        content = [pre_link, topic, "First person start! You get two minutes to speak", "Switch! Next person has two minutes to speak", post_link]
+        content = [PRELINK, TOPIC, START, SWITCH, POSTLINK]
         timer = EventMachine::PeriodicTimer.new(3) do
           puts "the time is #{Time.now}"
           web_socket.send({
