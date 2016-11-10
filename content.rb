@@ -10,10 +10,10 @@ Here are some helpful links if you want to learn more:\n
 > `<http://www.diversitydufferin.com/how-to-be.html|What Is An Ally?>`\n> `<https://medium.com/@agelender/6-action-items-for-white-people-in-the-workplace-beyond-ecf87271e89a#.cuxp78nv7|Actionable Allyship>`\n> `<http://leanin.org/tips/workplace-ally|How To Be a Workplace Ally>`\n> `<http://www.diversityinc.com/diversity-events/the-stereotype-threat-dr-claude-steele-mesmerizes-audience-video/|Stereotype Threat & Workplace Diversity>`
 allyquote
 
-START = "First person start! You get two minutes to speak."
+START = "*First person start!* You get two minutes to speak."
 
-SWITCH = "Switch! Next person has two minutes to speak."
+SWITCH = "*Switch!* Next person has two minutes to speak."
 
 PRELINK = "Here's the `<http://humanizebot.herokuapp.com/dropbox/survey?type=before|pre-session survey>`."
 
-POSTLINK = "Here's the `<http://humanizebot.herokuapp.com/dropbox/survey?type=after|post-session survey>`."
+POSTLINK = "Here's the `<http://humanizebot.herokuapp.com/dropbox/survey?type=after|post-session survey>`. Hope you enjoyed your Humanize session! :blush:"
