@@ -9,6 +9,7 @@ Dotenv.load
 require_relative 'humanize-api-helper'
 require_relative 'helpers'
 require_relative 'conversation'
+require_relative 'socket-helpers'
 
 include Convo
 
@@ -43,13 +44,14 @@ pairs = pair_users(clean_users)
 #   text: "```#{pairs}```",
 #   as_user: true
 #   })
+# sleep(10)
 
-HTTP.post("https://slack.com/api/chat.postMessage", params: {
-  token: ENV['TOKEN'],
-  channel: '#testing',
-  text: "#{allyship}",
-  as_user: true
-  })
+# HTTP.post("https://slack.com/api/chat.postMessage", params: {
+#   token: ENV['TOKEN'],
+#   channel: '#testing',
+#   text: "#{allyship}",
+#   as_user: true
+#   })
 
 EM.run do 
   web_socket = Faye::WebSocket::Client.new(web_socket_url)
@@ -65,12 +67,34 @@ EM.run do
     channel = data['channel']
 
     if user_input
-      response = give_correct_response(user_input.downcase, user_name, channel)
+      if user_input =~ /(begin)/
+        HTTP.post("https://slack.com/api/chat.postMessage", params: {
+        token: ENV['TOKEN'],
+        channel: '#testing',
+        text: "```#{pairs}```",
+        as_user: true
+        })
+      sleep(10)
+
+      HTTP.post("https://slack.com/api/chat.postMessage", params: {
+        token: ENV['TOKEN'],
+        channel: '#testing',
+        text: "#{allyship}",
+        as_user: true
+        })
+        #  if send_topic(web_socket, channel)
+        #   debug("hi")
+        # end
+        #  sleep(10)
+        #  send_groups(web_socket, channel)
+      else
+        response = give_correct_response(user_input.downcase, user_name, channel)
          web_socket.send({
           type: 'message',
           text: "#{response}",
-          channel: data['channel']
+          channel: channel
         }.to_json)
+      end
     end
     p [:message, data]
   end
