@@ -47,9 +47,23 @@ EM.run do
 
     if user_input
       if user_input =~ /(begin)/
-        send_groups(web_socket, pairs, channel)
-        content = [PRELINK, TOPIC, START, SWITCH, POSTLINK]
-        timer = EventMachine::PeriodicTimer.new(3) do
+
+         HTTP.post("https://slack.com/api/chat.postMessage", params: {
+          token: ENV['TOKEN'],
+          channel: channel,
+          text: "Sounds good! :blush: Here are your pair groups for today's session: \n```#{pairs}```",
+          as_user: true
+          })
+
+        HTTP.post("https://slack.com/api/chat.postMessage", params: {
+          token: ENV['TOKEN'],
+          channel: channel,
+          text: PRELINK,
+          as_user: true
+          })
+
+        content = [TOPIC, PAIRUP, START, SWITCH, POSTLINK]
+        timer = EventMachine::PeriodicTimer.new(60) do
           puts "the time is #{Time.now}"
 
           # an error in Slack RTM API prevents links from being correctly formatted,
