@@ -7,7 +7,7 @@ Engineer empathy and foster emotional intelligence in your workplace. HumanizeBo
 ## Authored by
 
 * Christopher Chan ([@christopherchan35](http://github.com/christopherchan35))
-* Elisabeth Bahadori ([@elliedori](http://github.com/elliedori))
+* Ellie Bahadori ([@elliedori](http://github.com/elliedori))
 * Ilaria Varriale ([@HigitusFigitus](http://github.com/HigitusFigitus))
 * Young Ju (Sally) Park ([@parkyngj](http://github.com/parkyngj))
 
